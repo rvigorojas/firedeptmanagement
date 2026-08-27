@@ -1,6 +1,13 @@
-# Sistema de Gestión Bomberil (Fire Department Management)
+# SSEI Aeroportuario — Sistema de Gestión de Emergencias
 
-Sistema web de administración de emergencias y personal para un cuerpo de bomberos voluntarios. Originalmente desarrollado por el Cuerpo de Bomberos Voluntarios de la Universidad Simón Bolívar (CBV-USB) en 2013, y portado en este repositorio a un stack moderno (Python 3 / Django 4.2 LTS) para poder ejecutarse y evaluarse hoy.
+Sistema web de administración de emergencias y personal, con la identidad de
+un Servicio de Salvamento y Extinción de Incendios (SSEI) aeroportuario.
+Basado originalmente en el proyecto de código abierto del Cuerpo de Bomberos
+Voluntarios de la Universidad Simón Bolívar (CBV-USB, 2013), portado a un
+stack moderno (Python 3 / Django 4.2 LTS) y luego rebrandeado y adaptado a
+operativa aeroportuaria a partir de un diseño generado en Stitch. Ver
+[`docs/CORRECCIONES.md`](docs/CORRECCIONES.md), sección "Integración del
+diseño de Stitch", para el detalle completo de esta adaptación.
 
 ## ¿Qué hace?
 
