@@ -1,0 +1,169 @@
+/*
+ * Tema visual "SSEI Aeroportuario"
+ * ---------------------------------
+ * Reskin oscuro aplicado sobre Bootstrap 2 / style.css para alinear la
+ * aplicación real (Django) con el diseño de referencia generado en Stitch
+ * ("SSEI Aeroportuario" - Servicio de Salvamento y Extinción de Incendios).
+ *
+ * No reemplaza el layout base (sigue siendo un navbar superior heredado del
+ * proyecto original de 2013), pero adopta la misma identidad visual:
+ * paleta oscura (azul marino / naranja-rojo), terminología aeroportuaria y
+ * tarjetas de estado tipo "Centro de Mando". Ver docs/CORRECCIONES.md,
+ * sección "Integración del diseño de Stitch".
+ */
+
+:root {
+  --ssei-bg:        #0c1526;
+  --ssei-bg-alt:    #101d33;
+  --ssei-card:      #142544;
+  --ssei-card-alt:  #1b3358;
+  --ssei-border:    #24406b;
+  --ssei-text:      #e7ecf5;
+  --ssei-text-dim:  #93a2c0;
+  --ssei-accent:    #ff5a36;
+  --ssei-accent-dk: #d8451f;
+  --ssei-blue:      #3b82f6;
+  --ssei-green:     #35c987;
+  --ssei-amber:     #f5a524;
+}
+
+body {
+  background: var(--ssei-bg) !important;
+  color: var(--ssei-text);
+}
+
+#logo img { max-width: 64px; }
+
+header {
+  background: linear-gradient(180deg, var(--ssei-bg-alt) 0%, var(--ssei-bg) 100%);
+  border-bottom: 2px solid var(--ssei-accent);
+}
+
+#site_header h1 {
+  color: var(--ssei-text) !important;
+  font-family: 'Oswald', Arial, sans-serif;
+  letter-spacing: 1px;
+}
+#site_header h2, #site_header h3 {
+  color: var(--ssei-text-dim) !important;
+}
+
+nav .navbar-inner {
+  background: var(--ssei-bg-alt) !important;
+  background-image: none !important;
+  border-bottom: 1px solid var(--ssei-border);
+  box-shadow: none;
+}
+
+nav .nav > li > a {
+  color: var(--ssei-text-dim) !important;
+  text-shadow: none !important;
+}
+nav .nav > li.active > a,
+nav .nav > li > a:hover {
+  background: var(--ssei-accent) !important;
+  color: #fff !important;
+}
+nav .dropdown-menu {
+  background: var(--ssei-card) !important;
+  border: 1px solid var(--ssei-border);
+}
+nav .dropdown-menu li > a {
+  color: var(--ssei-text) !important;
+}
+nav .dropdown-menu li > a:hover {
+  background: var(--ssei-card-alt) !important;
+  color: #fff !important;
+}
+
+body, #main_container, .container { color: var(--ssei-text); }
+
+h1, h2, h3, h4, h5, h6 { color: var(--ssei-text); }
+
+/* Tarjetas / paneles tipo "Centro de Mando" */
+.table {
+  background: var(--ssei-card);
+  color: var(--ssei-text);
+  border: 1px solid var(--ssei-border);
+}
+.table-striped tbody > tr:nth-child(odd) > td,
+.table-striped tbody > tr:nth-child(odd) > th {
+  background-color: var(--ssei-card-alt);
+}
+.table th {
+  color: var(--ssei-text-dim);
+  border-bottom: 1px solid var(--ssei-border);
+}
+.table td {
+  border-top: 1px solid var(--ssei-border);
+}
+
+/* Botones de acción principal (p.ej. "Nuevo Incidente" / "Insertar Servicio") */
+.btn-primary, input[type="submit"].btn-primary {
+  background: var(--ssei-accent) !important;
+  background-image: none !important;
+  border-color: var(--ssei-accent-dk) !important;
+  text-shadow: none !important;
+}
+.btn-primary:hover { background: var(--ssei-accent-dk) !important; }
+
+/* Avisos operativos (High Wind Advisory / Aviso de Vientos Fuertes, etc.) */
+.alert {
+  background: var(--ssei-card-alt) !important;
+  border: 1px solid var(--ssei-blue) !important;
+  border-left: 4px solid var(--ssei-amber) !important;
+  color: var(--ssei-text) !important;
+  text-shadow: none;
+}
+.alert-success { border-left-color: var(--ssei-green) !important; }
+.alert-error   { border-left-color: var(--ssei-accent) !important; }
+
+/* Tarjetas de estadísticas rápidas del Tablero (Incidentes Activos, etc.) */
+.ssei-stats { display: flex; flex-wrap: wrap; gap: 14px; margin: 10px 0 24px; }
+.ssei-stat-card {
+  flex: 1 1 180px;
+  background: var(--ssei-card);
+  border: 1px solid var(--ssei-border);
+  border-radius: 6px;
+  padding: 14px 16px;
+}
+.ssei-stat-card .label {
+  text-transform: uppercase;
+  font-size: 11px;
+  letter-spacing: .5px;
+  color: var(--ssei-text-dim);
+  display: block;
+  margin-bottom: 6px;
+}
+.ssei-stat-card .value {
+  font-size: 28px;
+  font-weight: bold;
+  color: var(--ssei-text);
+}
+.ssei-stat-card.accent .value { color: var(--ssei-accent); }
+.ssei-stat-card.blue .value   { color: var(--ssei-blue); }
+.ssei-stat-card.green .value  { color: var(--ssei-green); }
+
+/* Estado (pills) usados en Listado de Servicios */
+.ssei-pill {
+  display: inline-block;
+  padding: 2px 9px;
+  border-radius: 10px;
+  font-size: 11px;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+.ssei-pill-active   { background: var(--ssei-accent); color: #fff; }
+.ssei-pill-progress { background: var(--ssei-amber); color: #201400; }
+.ssei-pill-resolved { background: #2b3c58; color: var(--ssei-text-dim); }
+
+footer, footer .container { background: var(--ssei-bg-alt); color: var(--ssei-text-dim); }
+footer a { color: var(--ssei-blue); }
+
+input, select, textarea {
+  background: var(--ssei-card) !important;
+  color: var(--ssei-text) !important;
+  border: 1px solid var(--ssei-border) !important;
+}
+
+.dropdown-toggle .caret { border-top-color: var(--ssei-text-dim) !important; }
