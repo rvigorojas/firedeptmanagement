@@ -70,7 +70,7 @@ Se agregó una app nueva, `comunicaciones/`, con:
 transcripción literal de un requisito confirmado.** Si la sección debía tener
 otro propósito (por ejemplo: comunicaciones con la comunidad externa,
 bitácora de radio, registro de llamadas de emergencia entrantes, etc.), el
-modelo y las vistas están aislados en su propia app y son fáciles de ajustar
+modelo y las vistas están aisladas en su propia app y son fáciles de ajustar
 o reemplazar sin tocar el resto del sistema.
 
 ## 3. Despliegue — pendiente, requiere una decisión del equipo
@@ -120,6 +120,49 @@ externa de diseño. El resultado (mockups o especificaciones de estilo) puede
 traerse de vuelta para aplicar cambios puntuales de CSS/plantillas, pero no
 hay nada que una IA pueda generar aquí sin ese insumo visual primero.
 
+## 6. Integración del diseño de Stitch — implementado
+
+El diseño de referencia generado con Stitch ("SSEI Aeroportuario", 5 pantallas:
+Dashboard escritorio, Dashboard móvil, Listado de Servicios, Tablón de
+Anuncios y Estadísticas) se integró a la aplicación real (Django), en lugar
+de quedar solo como un mockup separado. Cambios concretos:
+
+- **Identidad/marca**: el encabezado del sitio (`settings.SITE_HEADER`) y el
+  `<title>` pasaron de "Cuerpo de Bomberos Voluntarios — Universidad Simón
+  Bolívar" a **"SSEI Aeroportuario — Servicio de Salvamento y Extinción de
+  Incendios / Base SSEI - Operacional"**.
+- **Tema visual**: se agregó `staticfiles/css/ssei_theme.css`, una hoja de
+  estilos oscura (azul marino / naranja-rojo) que se carga después de
+  `style.css` y reestiliza navbar, tablas, alertas, botones y formularios
+  para que coincidan con la paleta del diseño de Stitch, sin reescribir el
+  layout heredado de Bootstrap 2 del proyecto original.
+- **Tipos de incidente**: `Service.SERVICE_TYPE_CHOICES` (en `ops/models.py`)
+  se actualizó para reflejar operativa aeroportuaria real: *Falla de
+  Aeronave*, *Derrame de Combustible (Jet-A1)*, *Emergencia Médica
+  (Terminal/Plataforma)*, *Incendio en Estructura/Plataforma*, *Falsa Alarma*
+  y *Simulacro Regulatorio (RAP 314/OACI)*. Los códigos originales del
+  proyecto 2013 se conservaron al final de la lista por compatibilidad
+  (migración `ops/0002_alter_service_service_type`).
+- **Tablero (Dashboard) operativo**: la vista `common.views.base` ahora
+  calcula indicadores tipo "Centro de Mando" (incidentes activos, unidades
+  desplegadas, personal de turno, tiempo promedio de respuesta) que se
+  muestran como tarjetas en `inicio.html`, igual que en el diseño de Stitch.
+- **Datos de ejemplo**: los servicios de demostración se reemplazaron por
+  escenarios aeroportuarios (falla de tren de aterrizaje en Pista 10L,
+  derrame de Jet-A1 en Plataforma Sur, simulacro RAP 314 en Sector Pista,
+  etc.) para que el video y las capturas sean consistentes con la nueva
+  identidad.
+- **Video de demostración**: se regrabó (`docs/video/demo_mvp.mp4`) sobre la
+  aplicación ya con el nuevo tema y los nuevos datos de ejemplo.
+
+Lo que **no** se hizo, por alcance/tiempo: no se reconstruyó el layout como
+un sidebar fijo pixel-a-pixel idéntico al mockup de Stitch (la app sigue
+usando el navbar superior heredado de 2013); la identidad, terminología, tema
+de color y contenido operativo sí quedaron alineados. Si se requiere fidelidad
+visual 1:1 con el mockup, el siguiente paso sería un rediseño de layout más
+profundo (barra lateral fija, tarjetas con esquinas redondeadas idénticas,
+etc.), fuera del alcance de esta corrección.
+
 ## Verificación posterior a estos cambios
 
 Se repitió la verificación manual de rutas (sesión autenticada, servidor
@@ -128,3 +171,9 @@ local) incluyendo las nuevas: `/comunicaciones/`, `/comunicaciones/nueva/`
 `?tipo=CM`), además de las rutas ya verificadas en
 [`docs/MIGRACION.md`](MIGRACION.md). Todas responden `200 OK`, y el archivo
 `.xlsx` generado se abrió y verificó con `openpyxl`.
+
+Tras la integración del diseño de Stitch (sección 6) se repitió el barrido
+completo de rutas (`/`, `/servicios/`, `/comunicaciones/`,
+`/comunicaciones/nueva/`, `/estadisticas/`, `/directorio/`, `/miperfil/`,
+`/servicios/exportar/`, `/admin/`) con sesión autenticada: todas responden
+`200 OK` después de aplicar la migración `ops/0002_alter_service_service_type`.
