@@ -2,6 +2,28 @@
 {% load thumbnail %}
 {% block content %}
 
+<div class="span12">
+	<h2>Centro de Mando</h2>
+	<div class="ssei-stats">
+		<div class="ssei-stat-card accent">
+			<span class="label">Incidentes Activos</span>
+			<span class="value">{{active_incidents_count|stringformat:"02d"}}</span>
+		</div>
+		<div class="ssei-stat-card blue">
+			<span class="label">Unidades Desplegadas</span>
+			<span class="value">{{units_deployed_count|stringformat:"02d"}}</span>
+		</div>
+		<div class="ssei-stat-card">
+			<span class="label">Personal de Turno</span>
+			<span class="value">{{personnel_on_duty_count}}</span>
+		</div>
+		<div class="ssei-stat-card green">
+			<span class="label">Tiempo Prom. Respuesta</span>
+			<span class="value">{% if avg_response_minutes %}{{avg_response_minutes}} min{% else %}--{% endif %}</span>
+		</div>
+	</div>
+</div>
+
 <div class="span9">
 	<h2>Últimos Servicios</h2>
 	<div id="map_canvas" style="width: 100%;height: 400px;"></div>
