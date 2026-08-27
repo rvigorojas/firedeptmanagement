@@ -1,0 +1,14 @@
+django==4.2.*
+pillow
+unidecode
+sorl-thumbnail
+openpyxl
+
+# Opcional, solo si se activa la integración LDAP institucional (deshabilitada
+# por defecto, ver docs/MIGRACION.md, sección 6):
+# python-ldap
+# django-auth-ldap
+
+# Opcional, solo si se despliega con Gunicorn (ver docs/CORRECCIONES.md,
+# sección 3 "Despliegue"):
+# gunicorn

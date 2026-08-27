@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="row">
+	<div class="span12">
+		<h2>Comunicaciones</h2>
+		<p><a href="{% url 'create_communication' %}" class="btn btn-primary">Nueva Comunicación</a></p>
+
+		{% for c in communications %}
+			<div class="well{% if c.pinned %} alert-info{% endif %}">
+				<h4>{% if c.pinned %}[Fijada] {% endif %}{{ c.title }}</h4>
+				<p>{{ c.body|linebreaks }}</p>
+				<small>
+					{% if c.created_by %}Publicado por {{ c.created_by }} &mdash; {% endif %}
+					{{ c.created_at|date:"d/m/Y H:i" }}
+				</small>
+			</div>
+		{% empty %}
+			<p>No hay comunicaciones publicadas todavía.</p>
+		{% endfor %}
+	</div>
+</div>
+{% endblock %}

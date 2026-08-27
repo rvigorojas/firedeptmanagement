@@ -1,0 +1,23 @@
+{%extends "base.html" %}
+{% load bootstrap_toolkit %}
+{% block content %}
+<div>
+	<form class="form-horizontal" style="margin-bottom: 30px" method="post">
+		{% csrf_token %}
+		{{arrest_payment_form|as_bootstrap}}
+		<button type="submit" class="btn btn-primary" style="margin-left:400px">Insertar</button>
+	</form>
+</div>
+{% endblock %}
+{% block scripts%}
+ 	{{block.super}}
+ 	<script src="{{STATIC_URL}}js/libs/jquery.maskedinput-1.3.min.js"></script>
+ 	<script src="{{STATIC_URL}}js/ops/insert_arrest.js"></script>
+	<script type="text/javascript" >
+	  $(document).ready(insert_arrest_payment_ready(
+          {
+          'ff_autocomplete_url': "{%url 'autocomplete_firefighter' %}"
+	  }
+          ));	
+	</script>
+{%endblock%}

@@ -1,0 +1,102 @@
+#coding=utf-8
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render, redirect
+from personal.models import Firefighter
+from personal.forms import PersonPhoneForm, PartialFirefighterForm
+from django.contrib import messages
+from django.http import HttpResponse
+from utils.serialization import get_values
+import json
+from sorl.thumbnail import get_thumbnail
+
+@login_required
+def user_profile(request, ff_id=None):
+    params = {}
+    if ff_id:
+        firefighter = Firefighter.objects.get(id=ff_id)
+    else:
+        firefighter = request.user.firefighter
+
+    params["firefighter"] = firefighter
+    return render(request, "profile.html", params)
+
+
+@login_required
+def view_cnb_form(request, ff_id):
+    firefighter = Firefighter.objects.get(id=ff_id)
+    params = {"ff": firefighter}
+    return render(request, "planilla_cnb.html", params)
+
+@login_required
+def change_profile_get(request):
+    params = {}
+    firefighter = request.user.firefighter
+    form = PersonPhoneForm()
+    profile_form = PartialFirefighterForm(instance=firefighter)
+
+    bound_forms = []
+    for person_phone in firefighter.persontelephonenumber_set.all():
+        data = {
+                'id': person_phone.id,
+                'type': person_phone.type,
+                'code': person_phone.telephone_number.code,
+                'number': person_phone.telephone_number.number
+                }
+        bound_forms.append(PersonPhoneForm(data))
+
+    params['bound_forms'] = bound_forms
+    params['new_form'] = form
+    params['profile_form'] = profile_form
+
+    return render(request, "change_profile.html", params)
+
+
+@login_required
+def change_profile(request):
+    if request.method == "POST":
+        firefighter = request.user.firefighter
+        profile_form = PartialFirefighterForm(request.POST, request.FILES, instance=firefighter)
+        if profile_form.is_valid():
+            profile_form.save()
+    return redirect(change_profile_get)
+
+
+@login_required
+def change_phone(request):
+    firefighter = request.user.firefighter
+    form = PersonPhoneForm()
+    if request.method == "POST":
+        form = PersonPhoneForm(request.POST)
+        if form.is_valid():
+            messages.success(request, u'Los cambios fueron guardados exitosamente')
+            form.save(firefighter)
+        else:
+            messages.error(request, u'Existen errores en el formulario, chequea que estes usando el formato correcto (c&oacute;digo: 0212, n&uacute;mero: 1231212)')
+    return redirect(change_profile_get)
+
+
+@login_required
+def delete_phone(request, phone_id):
+    firefighter = request.user.firefighter
+    firefighter.persontelephonenumber_set.get(id=phone_id).delete()
+    return redirect(change_profile_get)
+
+
+@login_required
+def autocomplete_firefighter(request):
+    term = request.GET.get("term", "")
+    ffs = Firefighter.search(term)
+    return HttpResponse(json.dumps([get_values(x) for x in ffs]))
+
+def autocomplete_firefighter_active(request):
+    term = request.GET.get("term", "")
+    ffs = Firefighter.search(term)
+    return HttpResponse(json.dumps([get_values(x) for x in ffs if x.user.is_active]))
+
+def ff_sample(request):
+    ffs =  [x for x in Firefighter.objects.all() if x.is_active()  and x.profile_picture and x.number][:24]
+    data = []
+    for ff in ffs:
+       im = get_thumbnail(ff.profile_picture, '70x70', crop='center', format='PNG')
+       data.append({"name": str(ff), "im": {"url": im.url, "width": im.width, "height":im.height}})
+    return HttpResponse(json.dumps(data))

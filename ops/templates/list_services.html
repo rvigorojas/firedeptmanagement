@@ -1,0 +1,83 @@
+{%extends "base.html" %}
+{% load thumbnail %}
+{% block content %}
+	<form method="get" action="{% url 'export_services_excel' %}" class="form-inline" style="margin-bottom: 15px;">
+		<label for="tipo_export">Exportar a Excel:</label>
+		<select name="tipo" id="tipo_export">
+			<option value="">Todos los tipos</option>
+			{% for code, label in service_type_choices %}
+				<option value="{{ code }}">{{ label }}</option>
+			{% endfor %}
+		</select>
+		<button type="submit" class="btn btn-primary">Exportar</button>
+	</form>
+	<table class="table table-striped">
+		<thead>
+			<tr>
+				<th>#</th>
+				<th>Fecha</th>
+				<th>Hora</th>
+				<th>Tipo</th>
+				<th>Descripción</th>
+				<th>Comisiones</th>
+			</tr>
+		</thead>
+		<tbody>
+			{%for service in services%}
+				<tr>
+					<td><a href="{% url 'view_service' service_id=service.id%}">{{service.id}}</a></td>
+					<td><a href="{% url 'view_service' service_id=service.id%}">{{service.date|date:"d/n/Y"}}</a></td>
+					<td><a href="{% url 'view_service' service_id=service.id%}">{{service.time|date:"Hi"}}</a></td>
+					<td>{{service.service_type}}</td>
+					<td>{{service.description|truncatewords:50}}</td>
+					<td>
+						{% for vehicle in service.vehicles.all %}
+							<div>
+								{{vehicle.vehicle.name}}
+								<a href="{% url 'perfil_f' ff_id=vehicle.lead.id %}">
+									{%if vehicle.lead.picture%}
+										{% thumbnail vehicle.lead.picture "35x35" crop="center" format="PNG"   as im %}
+											<img width="{{im.width}}" height="{{im.height}}" src='{{im.url}}'></img>
+										{% endthumbnail %}
+									{%else%}
+										{{lead.initials}}
+									{%endif%}
+								</a>
+								{%for crew_member in vehicle.crew.all%}
+									<a href="{% url 'perfil_f' ff_id=crew_member.id %}">
+										{%if crew_member.picture%}
+											{% thumbnail crew_member.picture "35x35" crop="center" format="PNG"   as im %}
+												<img width="{{im.width}}" height="{{im.height}}" src='{{im.url}}'></img>
+											{% endthumbnail %}
+										{%else%}
+											{{crew_member.initials}}
+										{%endif%}
+									</a>
+								{% endfor %}
+							</div>		
+						{% endfor %}
+					</td>
+				</tr>	
+			{%endfor%}
+		</tbody>
+	</table>
+	<div class="pagination">
+		<ul>			
+        	<li class="{% if not services.has_previous %}disabled{% endif %}">
+        		<a href="{% if services.has_previous %}?page={{ services.previous_page_number }}{%endif%}">Anterior</a>
+        	</li>
+        	
+			{%for page in paginator.page_range%}
+				<li class="{% if services.number == page %}active{%endif%}"><a href="?page={{ page }}">{{page}}</a></li>
+			{%endfor%}
+			
+			<li class="{% if not services.has_next %}disabled{% endif %}">
+        		<a href="{% if services.has_next %}?page={{ services.next_page_number }}{%endif%}">Siguiente</a>
+        	</li>
+		</ul>
+	</div>
+{%endblock%}
+
+{% block scripts%}
+ 	{{block.super}}
+{%endblock%}
