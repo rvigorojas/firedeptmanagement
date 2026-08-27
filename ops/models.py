@@ -53,7 +53,25 @@ class Service(models.Model):
         verbose_name = "Servicio"
         verbose_name_plural = "Servicios"
 
+    # Tipos de servicio/incidente alineados a la operativa de un SSEI
+    # Aeroportuario (Servicio de Salvamento y Extinción de Incendios), según
+    # el diseño de referencia generado en Stitch. Se conservan al final los
+    # códigos originales del proyecto 2013 (campus universitario) por
+    # compatibilidad con datos/demos existentes. Ver docs/CORRECCIONES.md,
+    # sección "Integración del diseño de Stitch".
     SERVICE_TYPE_CHOICES = (
+                            (u'AER', u'Falla de Aeronave'),
+                            (u'COMB', u'Derrame de Combustible (Jet-A1)'),
+                            (u'MED', u'Emergencia Médica (Terminal/Plataforma)'),
+                            (u'INC', u'Incendio en Estructura/Plataforma'),
+                            (u'ALM', u'Falsa Alarma / Activación de Detector'),
+                            (u'SIM', u'Simulacro Regulatorio (RAP 314/OACI)'),
+                            (u'MP', u'Matpel'),
+                            (u'RES1', u'Rescate de Personas'),
+                            (u'SE', u'Servicio Especial'),
+                            (u'GP', u'Guardia de Prevención'),
+                            (u'NSA', u'No se actuó'),
+                            # --- Códigos originales (compatibilidad histórica) ---
                             (u'CM', u'Control Médico'),
                             (u'AME1', u'Atención Médica de Emergencia'),
                             (u'AME2', u'Atención Médica de Enfermo'),
@@ -61,12 +79,7 @@ class Service(models.Model):
                             (u'IDV', u'Incendio de Vegetación'),
                             (u'PC', u'Prevención y Control'),
                             (u'AY', u'Apoyo a la comunidad'),
-                            (u'MP', u'Matpel'),
-                            (u'RES1', u'Rescate de Personas'),
                             (u'RES2', u'Rescate Animal'),
-                            (u'SE', u'Servicio Especial'),
-                            (u'GP', u'Guardia de Prevención'),
-                            (u'NSA', u'No se actuó'),
                             (u'FA', u'Falsa Alarma'),
                             )
 
