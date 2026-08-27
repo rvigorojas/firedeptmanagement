@@ -11,12 +11,13 @@
        More info: h5bp.com/i/378 -->
   	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 
-	<title>Sistema de Gestión Bomberil</title>
+	<title>SSEI Aeroportuario | Centro de Mando</title>
     <!-- Mobile viewport optimized: h5bp.com/viewport -->
  	<meta name="viewport" content="width=device-width">
 
 	<link rel="stylesheet" href="{{STATIC_URL}}css/bootstrap.css" type="text/css" media="screen" />
 	<link rel="stylesheet" href="{{STATIC_URL}}css/style.css" type="text/css" media="screen" />
+	<link rel="stylesheet" href="{{STATIC_URL}}css/ssei_theme.css" type="text/css" media="screen" />
 	<link href='http://fonts.googleapis.com/css?family=Oswald:400,700,300' rel='stylesheet' type='text/css'>
 	<link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.23/themes/base/jquery-ui.css" type="text/css" />
   	<script type="text/javascript" src="http://www.google.com/jsapi"></script>
@@ -41,7 +42,7 @@
 			<div class="row header">
 				<div class="span2">
 					<a href="{% url 'base' %}" title="Regresar al inicio" id="logo">
-		  				<img src="{{STATIC_URL}}{% autoescape off %}{{LOGO_URL}}{% endautoescape %}" alt="Logo CBVUSB" width="170px" />
+		  				<img src="{{STATIC_URL}}{% autoescape off %}{{LOGO_URL}}{% endautoescape %}" alt="Logo SSEI" width="170px" />
 					</a>
 				</div>
 		  		<div class="span10">
@@ -59,7 +60,7 @@
   		<div class="navbar-inner">
     		<div class="container">
       			<ul class="nav">
-					<li class="active"><a href="{% url 'base' %}">Inicio</a></li>
+					<li class="active"><a href="{% url 'base' %}">Tablero</a></li>
 					<li><a href="{% url 'perfil' %}">Mi Perfil</a></li>   		
 					<li><a href="{% url 'directorio' %}">Directorio</a></li>
 					<li><a href="{% url 'list_communications' %}">Comunicaciones</a></li>
