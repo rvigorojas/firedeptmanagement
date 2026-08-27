@@ -120,7 +120,10 @@ AUTH_PROFILE_MODULE = "personal.Firefighter"
 THUMBNAIL_DEBUG = True
 DEFAULT_CHARSET = 'utf-8'
 
-SITE_HEADER= u"<hgroup id='site_header'><h1>Cuerpo de Bomberos Voluntarios</h1><h2>UNIVERSIDAD SIMÓN BOLÍVAR</h2><h3>Disciplina - Estudio - Excelencia</h3></hgroup>"
+# Encabezado del sitio: identidad "SSEI Aeroportuario" (Servicio de Salvamento
+# y Extinción de Incendios), alineada al diseño de referencia generado en
+# Stitch. Ver docs/CORRECCIONES.md, sección "Integración del diseño de Stitch".
+SITE_HEADER= u"<hgroup id='site_header'><h1>SSEI Aeroportuario</h1><h2>Servicio de Salvamento y Extinción de Incendios</h2><h3>Base SSEI - Operacional</h3></hgroup>"
 
 LOGO_URL="img/logo_top.gif"
 
