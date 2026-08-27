@@ -21,9 +21,24 @@ def base(request):
     services_locs = []
     for service in data['last_services']:
         if service.map_location:
-            services_locs.append({'id':str(service.id), 'loc':service.map_location, 'lat':float(service.map_location.split(",")[0]), 'lng':float(service.map_location.split(",")[1])})            
+            services_locs.append({'id':str(service.id), 'loc':service.map_location, 'lat':float(service.map_location.split(",")[0]), 'lng':float(service.map_location.split(",")[1])})
     data['last_services_locations'] = json.dumps(services_locs)
-    
+
+    # Tarjetas de estado tipo "Centro de Mando" (Tablero), alineadas al
+    # diseño de referencia de Stitch. Ver docs/CORRECCIONES.md, sección
+    # "Integración del diseño de Stitch".
+    active_services = Service.objects.filter(end_date__isnull=True)
+    data['active_incidents_count'] = active_services.count()
+    data['units_deployed_count'] = sum(s.vehicles.count() for s in active_services)
+    data['personnel_on_duty_count'] = len([x for x in Firefighter.objects.all() if x.is_active()])
+
+    recent_with_response = [s for s in Service.objects.all()[:30] if s.response_time()]
+    if recent_with_response:
+        avg_seconds = sum(s.response_time().total_seconds() for s in recent_with_response) / len(recent_with_response)
+        data['avg_response_minutes'] = round(avg_seconds / 60.0, 1)
+    else:
+        data['avg_response_minutes'] = None
+
     return render(request, 'inicio.html', data)
 
 @login_required
